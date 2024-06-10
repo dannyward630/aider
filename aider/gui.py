@@ -7,7 +7,7 @@ import sys
 import streamlit as st
 
 from aider import urls
-from aider.coders import Coder
+from aider.coders import Coder, GroqCoder
 from aider.dump import dump  # noqa: F401
 from aider.io import InputOutput
 from aider.main import main as cli_main
@@ -356,7 +356,11 @@ class GUI:
         return st.button(args, **kwargs)
 
     def __init__(self):
-        self.coder = get_coder()
+        coder_type = st.selectbox("Choose a coder", ["Default", "Groq"])
+        if coder_type == "Default":
+            self.coder = get_coder()
+        else:
+            self.coder = GroqCoder()
         self.state = get_state()
 
         # Force the coder to cooperate, regardless of cmd line args
